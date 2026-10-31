@@ -200,7 +200,7 @@ function ConfirmCard({ action, status, onDecide }: { action: NonNullable<Action>
         <p className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-primary">
           <Check className="size-4" />
           {isReminder ? (
-            <>Confirmed. <Link to="/" className="underline">See it on Bus</Link></>
+            <>Confirmed. <Link to="/bus" className="underline">See it on Bus</Link></>
           ) : (
             <>Posted. You choose who to ride with in <Link to="/help" className="underline">Help</Link>.</>
           )}
