@@ -173,7 +173,7 @@ function AskPage() {
   );
 }
 
-function ConfirmCard({ action, status, onDecide }: { action: NonNullable<Action>; status?: string; onDecide: (ok: boolean) => void }) {
+function ConfirmCard({ action, status, onDecide }: { action: NonNullable<Action>; status?: string | undefined; onDecide: (ok: boolean) => void }) {
   const isReminder = action.type === "reminder";
   return (
     <div className="rounded-2xl bg-card p-4 ring-1 ring-border">
