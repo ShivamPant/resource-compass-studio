@@ -5,6 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-display: "Fraunces", Georgia, serif;
   --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -33,6 +34,12 @@
   --color-human-foreground: var(--human-foreground);
   --color-warn: var(--warn);
   --color-warn-foreground: var(--warn-foreground);
+  --color-pine: var(--pine);
+  --color-pine-foreground: var(--pine-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-maple: var(--maple);
+  --color-sky: var(--sky);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -63,6 +70,15 @@
   --human-foreground: oklch(0.42 0.09 60);
   --warn: oklch(0.42 0.09 158);
   --warn-foreground: oklch(0.98 0.01 150);
+  --pine: oklch(0.27 0.06 160);
+  --pine-foreground: oklch(0.96 0.02 110);
+  --gold: oklch(0.82 0.13 80);
+  --gold-foreground: oklch(0.3 0.06 60);
+  --maple: oklch(0.62 0.17 40);
+  --sky: oklch(0.9 0.04 220);
+  --gradient-hero: linear-gradient(180deg, oklch(0.2 0.05 160 / 0.35) 0%, oklch(0.18 0.05 160 / 0.85) 100%);
+  --gradient-card: linear-gradient(135deg, oklch(0.42 0.09 158), oklch(0.3 0.07 165));
+  --shadow-lift: 0 20px 40px -20px oklch(0.27 0.06 160 / 0.45);
   --border: oklch(0.9 0.01 140);
   --input: oklch(0.88 0.012 140);
   --ring: oklch(0.42 0.09 158);
@@ -84,3 +100,16 @@
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
 }
+
+@utility font-display { font-family: var(--font-display); }
+@utility bg-hero { background-image: var(--gradient-hero); }
+@utility bg-pine-card { background-image: var(--gradient-card); }
+@utility shadow-lift { box-shadow: var(--shadow-lift); }
+@utility lift {
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  &:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@utility animate-rise { animation: rise 600ms cubic-bezier(.2,.7,.2,1) both; }
+@keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+@utility animate-live { animation: pulse-dot 1.6s ease-in-out infinite; }
