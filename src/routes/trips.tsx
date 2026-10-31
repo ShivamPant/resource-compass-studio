@@ -60,8 +60,9 @@ function TripsPage() {
   const missing = draft ? FIELDS.filter((f) => !draft[f.key].trim()) : [];
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Trips</h1>
+    <div className="grid gap-8 lg:grid-cols-2">
+      <h1 className="text-3xl font-bold lg:col-span-2">Trips</h1>
+      <div className="space-y-6">
 
       <section className="rounded-2xl bg-card p-4 ring-1 ring-border">
         <p className="font-semibold">Turn a trip email into a listing</p>
@@ -140,6 +141,7 @@ function TripsPage() {
         </section>
       )}
 
+      </div>
       <section>
         <h2 className="mb-2 text-sm font-semibold">Upcoming</h2>
         {trips.length === 0 ? (

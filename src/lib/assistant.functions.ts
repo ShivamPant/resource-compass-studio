@@ -34,7 +34,7 @@ If the user wants a ride or seat, propose a ride request draft.
 Respond ONLY with JSON: {"reply": string, "action": null | {"type":"reminder","departure": "<exact time from list>","leadMinutes": number} | {"type":"ride_request","destination": string,"when": string,"seats": number}}`;
     try {
       const out = await askClaude(system, data.messages);
-      return { ok: true as const, reply: String(out.reply ?? ""), action: (out.action ?? null) as Action };
+      return { ok: true as const, reply: String(out["reply"] ?? ""), action: (out["action"] ?? null) as Action };
     } catch (e) {
       console.error(e);
       return { ok: false as const, reply: "", action: null };

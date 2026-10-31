@@ -29,7 +29,7 @@ function HelpPage() {
   const [reported, setReported] = useState<string[]>([]);
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Ask the community</h1>
         <p className="text-sm text-muted-foreground">Replaces scattered Slack ride threads.</p>

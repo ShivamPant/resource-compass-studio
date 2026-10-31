@@ -25,15 +25,15 @@ function BusPage() {
   const reminderFor = (at: number) => reminders.find((r) => r.departureAt === at);
 
   return (
-    <div className="space-y-6">
-      <section>
+    <div className="grid items-start gap-8 lg:grid-cols-2">
+      <section className="lg:row-span-2">
         <p className="text-sm font-medium text-muted-foreground">{ROUTE.name}</p>
         <p className="text-sm text-muted-foreground">
           {ROUTE.from} → {ROUTE.to}
         </p>
         <div className="mt-4 rounded-2xl bg-card p-5 shadow-sm ring-1 ring-border">
           <p className="text-sm text-muted-foreground">Next bus in</p>
-          <p className="tnum text-6xl font-extrabold tracking-tight text-primary">
+          <p className="tnum text-7xl font-extrabold lg:text-8xl tracking-tight text-primary">
             {minsUntil(next.at, now)}
             <span className="ml-1 text-2xl font-semibold">min</span>
           </p>

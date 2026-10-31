@@ -19,62 +19,72 @@ export function AppShell({ children }: { children: ReactNode }) {
   const firing = firingReminders(reminders, now, dismissed);
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col bg-background">
-      <header className="sticky top-0 z-20 flex items-center justify-between border-b bg-background/95 px-5 py-3 backdrop-blur">
-        <img src={logo.url} alt="D Ride" className="h-8 w-auto" />
-        <span className="text-xs text-muted-foreground">Dartmouth · Hanover</span>
+    <div className="flex min-h-screen flex-col bg-background">
+      <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3">
+          <Link to="/"><img src={logo.url} alt="D Ride" className="h-10 w-auto" /></Link>
+          <nav>
+            <ul className="flex items-center gap-1">
+              {TABS.map(({ to, label, icon: Icon }) => {
+                const active = to === "/" ? path === "/" : path.startsWith(to);
+                const sos = to === "/sos";
+                return (
+                  <li key={to}>
+                    <Link
+                      to={to}
+                      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${
+                        sos
+                          ? "text-destructive ring-1 ring-destructive/40"
+                          : active
+                            ? "bg-secondary text-primary"
+                            : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Icon className="size-4" />
+                      <span className="hidden sm:inline">{label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        </div>
       </header>
 
       {!online && (
-        <div role="status" className="flex items-center gap-2 bg-muted px-5 py-2 text-xs text-muted-foreground">
+        <div role="status" className="flex items-center justify-center gap-2 bg-muted px-6 py-2 text-xs text-muted-foreground">
           <WifiOff className="size-3.5" /> You're offline. Showing the last saved timetable.
         </div>
       )}
 
-      {firing.map((r) => (
-        <div
-          key={r.id}
-          role="alert"
-          className="mx-4 mt-3 flex items-start gap-3 rounded-xl bg-primary p-4 text-primary-foreground shadow-lg animate-in slide-in-from-top-2"
-        >
-          <BellRing className="mt-0.5 size-5 shrink-0" />
-          <div className="flex-1">
-            <p className="font-semibold">
-              Bus in {minsUntil(r.departureAt, now)} min. Time to head out.
-            </p>
-            <p className="text-sm opacity-85">
-              {fmtTime(r.departureAt)} from {ROUTE.from}. {ROUTE.walkMin} min walk to the stop.
-            </p>
+      <div className="mx-auto w-full max-w-6xl px-6">
+        {firing.map((r) => (
+          <div
+            key={r.id}
+            role="alert"
+            className="mt-4 flex items-start gap-3 rounded-xl bg-primary p-4 text-primary-foreground shadow-lg animate-in slide-in-from-top-2"
+          >
+            <BellRing className="mt-0.5 size-5 shrink-0" />
+            <div className="flex-1">
+              <p className="font-semibold">Bus in {minsUntil(r.departureAt, now)} min. Time to head out.</p>
+              <p className="text-sm opacity-85">
+                {fmtTime(r.departureAt)} from {ROUTE.from}. {ROUTE.walkMin} min walk to the stop.
+              </p>
+            </div>
+            <button aria-label="Dismiss reminder" onClick={() => dismiss(r.id)} className="opacity-80">
+              <X className="size-4" />
+            </button>
           </div>
-          <button aria-label="Dismiss reminder" onClick={() => dismiss(r.id)} className="opacity-80">
-            <X className="size-4" />
-          </button>
+        ))}
+      </div>
+
+      <main className="mx-auto w-full max-w-6xl flex-1 px-6 pb-16 pt-8">{children}</main>
+
+      <footer className="border-t">
+        <div className="mx-auto max-w-6xl px-6 py-6 text-xs text-muted-foreground">
+          D Ride · Dartmouth, Hanover NH. D Ride is not monitored. Call 911 or Safety & Security for emergencies.
         </div>
-      ))}
-
-      <main className="flex-1 px-5 pb-28 pt-4">{children}</main>
-
-      <nav className="fixed inset-x-0 bottom-0 z-20 mx-auto max-w-md border-t bg-card">
-        <ul className="grid grid-cols-5">
-          {TABS.map(({ to, label, icon: Icon }) => {
-            const active = to === "/" ? path === "/" : path.startsWith(to);
-            const sos = to === "/sos";
-            return (
-              <li key={to}>
-                <Link
-                  to={to}
-                  className={`flex flex-col items-center gap-1 py-3 text-[11px] font-medium ${
-                    sos ? "text-destructive" : active ? "text-primary" : "text-muted-foreground"
-                  }`}
-                >
-                  <Icon className="size-5" strokeWidth={active ? 2.4 : 1.8} />
-                  {label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+      </footer>
     </div>
   );
 }
