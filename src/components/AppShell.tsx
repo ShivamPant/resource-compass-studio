@@ -1,30 +1,32 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Bus, MessageCircle, ShieldAlert, Map, Users, BellRing, WifiOff, X } from "lucide-react";
+import { BookOpen, Bus, Compass, ShieldAlert, Map, Users, WifiOff } from "lucide-react";
 import type { ReactNode } from "react";
-import { firingReminders, useStore } from "@/lib/store";
-import { fmtTime, minsUntil, ROUTE } from "@/lib/schedule";
-import logo from "@/assets/dride-logo.png.asset.json";
+import { useStore } from "@/lib/store";
+import { ReminderAlerts } from "@/components/ReminderAlerts";
+import logo from "@/assets/dride-logo.png";
 
 const TABS = [
   { to: "/bus", label: "Bus", icon: Bus },
-  { to: "/ask", label: "Ask", icon: MessageCircle },
+  { to: "/ask", label: "Ask Naksha", icon: Compass },
   { to: "/trips", label: "Trips", icon: Map },
-  { to: "/help", label: "Help", icon: Users },
+  { to: "/community", label: "Community", icon: Users },
+  { to: "/about", label: "About", icon: BookOpen },
   { to: "/sos", label: "SOS", icon: ShieldAlert },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const { reminders, now, dismissed, dismiss, online } = useStore();
-  const firing = firingReminders(reminders, now, dismissed);
+  const { online } = useStore();
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3">
-          <Link to="/"><img src={logo.url} alt="D Ride" className="h-10 w-auto" /></Link>
+      <header className="sticky top-0 z-20 bg-header backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:gap-6 sm:px-6">
+          <Link to="/" className="flex items-center">
+            <img src={logo} alt="D Ride" className="h-11 w-auto object-contain" />
+          </Link>
           <nav>
-            <ul className="flex items-center gap-1">
+            <ul className="flex items-center gap-0.5 sm:gap-1">
               {TABS.map(({ to, label, icon: Icon }) => {
                 const active = path.startsWith(to);
                 const sos = to === "/sos";
@@ -32,16 +34,16 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <li key={to}>
                     <Link
                       to={to}
-                      className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${
+                      className={`flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-semibold sm:px-3 ${
                         sos
                           ? "text-destructive ring-1 ring-destructive/40"
                           : active
-                            ? "bg-secondary text-primary"
+                            ? "bg-card/80 text-primary shadow-sm ring-1 ring-primary/15"
                             : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
                       <Icon className="size-4" />
-                      <span className="hidden sm:inline">{label}</span>
+                      <span className="hidden md:inline">{label}</span>
                     </Link>
                   </li>
                 );
@@ -57,28 +59,9 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      <div className="mx-auto w-full max-w-6xl px-6">
-        {firing.map((r) => (
-          <div
-            key={r.id}
-            role="alert"
-            className="mt-4 flex items-start gap-3 rounded-xl bg-primary p-4 text-primary-foreground shadow-lg animate-in slide-in-from-top-2"
-          >
-            <BellRing className="mt-0.5 size-5 shrink-0" />
-            <div className="flex-1">
-              <p className="font-semibold">Bus in {minsUntil(r.departureAt, now)} min. Time to head out.</p>
-              <p className="text-sm opacity-85">
-                {fmtTime(r.departureAt)} from {ROUTE.from}. {ROUTE.walkMin} min walk to the stop.
-              </p>
-            </div>
-            <button aria-label="Dismiss reminder" onClick={() => dismiss(r.id)} className="opacity-80">
-              <X className="size-4" />
-            </button>
-          </div>
-        ))}
-      </div>
+      <ReminderAlerts />
 
-      {path === "/" ? <main className="flex-1">{children}</main> : <main className="mx-auto w-full max-w-6xl flex-1 px-6 pb-16 pt-8">{children}</main>}
+      {path === "/" || path === "/about" ? <main className="flex-1">{children}</main> : <main className="mx-auto w-full max-w-6xl flex-1 px-6 pb-16 pt-8">{children}</main>}
 
       <footer className="border-t">
         <div className="mx-auto max-w-6xl px-6 py-6 text-xs text-muted-foreground">

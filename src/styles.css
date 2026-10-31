@@ -113,3 +113,104 @@
 @utility animate-rise { animation: rise 600ms cubic-bezier(.2,.7,.2,1) both; }
 @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
 @utility animate-live { animation: pulse-dot 1.6s ease-in-out infinite; }
+
+/* Landing intro: the D drives in left to right, the wordmark rises, "Go Big Green." rises word by
+   word over a row of sprouting pines, then a pine curtain sweeps up and lifts away. Exit is pure CSS
+   so the overlay can never get stuck if JS fails. */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 1.1rem;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 40%, #fffdf6 0%, var(--background) 70%);
+  cursor: pointer;
+  animation: splash-out 650ms cubic-bezier(.7,0,.2,1) 3.4s forwards;
+}
+.splash-logo { position: relative; width: min(46vw, 190px); aspect-ratio: 257 / 232; }
+.splash-logo img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.splash-mark { clip-path: inset(0 100% 27% 0); animation: splash-drive 1s cubic-bezier(.6,.05,.25,1) 150ms forwards; }
+.splash-word { clip-path: inset(73% 0 0 0); opacity: 0; transform: translateY(14px); animation: splash-word 500ms ease-out 950ms forwards; }
+.splash-quote { position: relative; display: flex; gap: .28em; font-family: var(--font-display); font-weight: 800; font-size: clamp(2.4rem, 8vw, 4.2rem); line-height: 1.1; color: var(--pine); }
+.splash-quote .w { display: inline-block; overflow: hidden; padding-bottom: .08em; }
+.splash-quote .w > span { display: inline-block; transform: translateY(110%); animation: splash-up 600ms cubic-bezier(.2,.8,.2,1) forwards; }
+.splash-quote .w:nth-child(1) > span { animation-delay: 1.35s; }
+.splash-quote .w:nth-child(2) > span { animation-delay: 1.5s; }
+.splash-quote .w:nth-child(3) > span { animation-delay: 1.65s; color: #00693e; font-style: italic; }
+.splash-brush { position: absolute; right: -.1em; bottom: -.18em; width: 3.4em; height: .45em; color: var(--gold); }
+.splash-brush path { stroke-dasharray: 320; stroke-dashoffset: 320; animation: splash-draw 600ms ease-out 2.05s forwards; }
+.splash-pines { display: flex; align-items: flex-end; gap: 10px; height: 34px; }
+.splash-pines span { width: 18px; background: #2f6b4f; clip-path: polygon(50% 0, 100% 100%, 0 100%); transform: scaleY(0); transform-origin: bottom; animation: splash-grow 450ms cubic-bezier(.3,1.5,.5,1) forwards; }
+.splash-place { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-foreground); opacity: 0; animation: splash-fade 500ms ease 2.25s forwards; }
+.splash-curtain { position: absolute; inset: 0; background: var(--pine); transform: translateY(100%); animation: splash-curtain 450ms cubic-bezier(.7,0,.3,1) 2.95s forwards; }
+@keyframes splash-drive { 0% { clip-path: inset(0 100% 27% 0); transform: scale(.94); } 100% { clip-path: inset(0 0 27% 0); transform: none; } }
+@keyframes splash-word { to { opacity: 1; transform: none; } }
+@keyframes splash-up { to { transform: none; } }
+@keyframes splash-draw { to { stroke-dashoffset: 0; } }
+@keyframes splash-grow { to { transform: scaleY(1); } }
+@keyframes splash-fade { to { opacity: 1; } }
+@keyframes splash-curtain { to { transform: none; } }
+@keyframes splash-out { to { clip-path: inset(0 0 100% 0); visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { .splash { display: none; } }
+@keyframes ring { 0%,60%,100% { transform: rotate(0); } 10%,30%,50% { transform: rotate(-14deg); } 20%,40% { transform: rotate(14deg); } }
+@utility animate-ring { animation: ring 1.8s ease-in-out infinite; transform-origin: 50% 10%; }
+@media (prefers-reduced-motion: reduce) { .animate-ring { animation: none; } }
+
+/* Header: a light wash from autumn gold to pine mint, echoing the hero photo. */
+@utility bg-header {
+  background-image: linear-gradient(100deg, oklch(0.975 0.035 88 / 0.94) 0%, oklch(0.978 0.012 120 / 0.94) 48%, oklch(0.955 0.03 158 / 0.94) 100%);
+  box-shadow: inset 0 -1px 0 oklch(0.88 0.03 120), 0 6px 20px -16px oklch(0.27 0.06 160 / 0.5);
+}
+@keyframes eq { 0%,100% { height: 25%; } 50% { height: 100%; } }
+@utility animate-eq { animation: eq 900ms ease-in-out infinite; height: 40%; }
+
+/* About page: notebook paper on a desk. */
+@utility font-hand { font-family: "Caveat", "Patrick Hand", cursive; }
+@utility font-pen { font-family: "Patrick Hand", "Caveat", cursive; }
+@utility bg-desk {
+  background-color: oklch(0.9 0.025 75);
+  background-image: radial-gradient(oklch(0.84 0.03 70) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+@utility paper {
+  background-color: #fffdf6;
+  background-image:
+    linear-gradient(90deg, transparent 62px, #f2b8b5 62px, #f2b8b5 64px, transparent 64px),
+    repeating-linear-gradient(to bottom, transparent 0 31px, #dbe7f2 31px 32px);
+  color: #2f3a35;
+}
+@utility tape {
+  &::before, &::after {
+    content: "";
+    position: absolute;
+    width: 86px;
+    height: 24px;
+    background: oklch(0.93 0.05 95 / 0.75);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+  }
+  &::before { top: -10px; left: 18px; transform: rotate(-6deg); }
+  &::after { bottom: -10px; right: 18px; transform: rotate(5deg); }
+}
+/* Visible without JS; once the page script runs it hides unseen items until they scroll in. */
+.reveal-ready [data-reveal]:not([data-reveal="shown"]) { opacity: 0; }
+.reveal-ready [data-reveal="shown"] { animation: rise 700ms cubic-bezier(.2,.7,.2,1) both; }
+@media (prefers-reduced-motion: reduce) { .reveal-ready [data-reveal] { opacity: 1 !important; animation: none !important; } }
+
+/* Landing hero: warm autumn sky behind the map, falling leaves, flowing active route. */
+@utility bg-sky {
+  background-color: #f7f0e3;
+  background-image:
+    radial-gradient(ellipse 60% 50% at 78% 18%, oklch(0.95 0.06 85 / 0.9), transparent 70%),
+    radial-gradient(ellipse 70% 60% at 10% 100%, oklch(0.93 0.04 60 / 0.7), transparent 70%),
+    linear-gradient(180deg, #fbf6ec 0%, #f4ecdc 100%);
+}
+/* Map edges dissolve into the hero background instead of ending in a hard rectangle. */
+.map-fade {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16%, #000 94%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 9%, #000 90%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent 0, #000 16%, #000 94%, transparent 100%), linear-gradient(to bottom, transparent 0, #000 9%, #000 90%, transparent 100%);
+  mask-composite: intersect;
+}

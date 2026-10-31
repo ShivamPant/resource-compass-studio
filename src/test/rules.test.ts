@@ -8,7 +8,7 @@ describe("safety handoff", () => {
 });
 
 describe("reminders", () => {
-  const r = { id: "a", departureAt: 60 * 60000, leadMin: 10, source: "you" as const };
+  const r = { id: "a", routeId: "juniper", departureAt: 60 * 60000, leadMin: 10, source: "you" as const };
   it("does not fire before lead time", () => expect(firingReminders([r], 49 * 60000, [])).toHaveLength(0));
   it("fires within lead time", () => expect(firingReminders([r], 51 * 60000, [])).toHaveLength(1));
 });

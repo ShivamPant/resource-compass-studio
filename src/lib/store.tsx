@@ -1,17 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { seedEvents, seedTrips, type CampusEvent, type Trip } from "@/lib/trips";
+import { seedPosts, type RidePost } from "@/lib/rides";
 
-export type Reminder = { id: string; departureAt: number; leadMin: number; source: "you" | "ai" };
-export type Trip = {
-  id: string;
-  title: string;
-  date: string;
-  departTime: string;
-  meetingPoint: string;
-  destination: string;
-  seats: string;
-  organizer: string;
-  cost: string;
-};
+export type { Trip } from "@/lib/trips";
+export type Reminder = { id: string; routeId: string; departureAt: number; leadMin: number; source: "you" | "ai" };
 
 type Ctx = {
   now: number;
@@ -25,43 +17,25 @@ type Ctx = {
   dismiss: (id: string) => void;
   trips: Trip[];
   addTrip: (t: Omit<Trip, "id">) => void;
+  toggleJoin: (id: string) => void;
+  /** Events the student registered for elsewhere; trips can carpool to them. */
+  events: CampusEvent[];
+  posts: RidePost[];
+  addPost: (p: Omit<RidePost, "id" | "postedAt" | "offers">) => void;
+  updatePost: (id: string, patch: Partial<RidePost>) => void;
   online: boolean;
 };
 
 const StoreCtx = createContext<Ctx | null>(null);
-
-// DEMO DATA: seeded trips, not pulled from any real email list.
-const SEED_TRIPS: Trip[] = [
-  {
-    id: "t1",
-    title: "Moosilauke sunrise hike",
-    date: "Sat, Nov 7",
-    departTime: "5:15 AM",
-    meetingPoint: "Robinson Hall steps",
-    destination: "Mount Moosilauke",
-    seats: "3 of 8 open",
-    organizer: "Priya Raman '27",
-    cost: "Free",
-  },
-  {
-    id: "t2",
-    title: "Lebanon Target run",
-    date: "Sun, Nov 8",
-    departTime: "2:00 PM",
-    meetingPoint: "Collis porch",
-    destination: "Target, West Lebanon",
-    seats: "1 of 4 open",
-    organizer: "Marcus Bell '26",
-    cost: "$3 gas split",
-  },
-];
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [base, setBase] = useState(() => Date.now());
   const [offsetMin, setOffset] = useState(0);
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const [dismissed, setDismissed] = useState<string[]>([]);
-  const [trips, setTrips] = useState<Trip[]>(SEED_TRIPS);
+  const [trips, setTrips] = useState<Trip[]>(() => seedTrips(Date.now()));
+  const [events] = useState<CampusEvent[]>(() => seedEvents(Date.now()));
+  const [posts, setPosts] = useState<RidePost[]>(() => seedPosts(Date.now()));
   const [online, setOnline] = useState(true);
 
   useEffect(() => {
@@ -89,18 +63,30 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       reminders,
       addReminder: (r) =>
         setReminders((rs) =>
-          rs.some((x) => x.departureAt === r.departureAt)
+          rs.some((x) => x.routeId === r.routeId && x.departureAt === r.departureAt)
             ? rs
-            : [...rs, { ...r, id: `${r.departureAt}-${Date.now()}` }],
+            : [...rs, { ...r, id: `${r.routeId}-${r.departureAt}-${Date.now()}` }],
         ),
       removeReminder: (id) => setReminders((rs) => rs.filter((r) => r.id !== id)),
       dismissed,
       dismiss: (id) => setDismissed((d) => [...d, id]),
       trips,
       addTrip: (t) => setTrips((ts) => [{ ...t, id: `t${Date.now()}` }, ...ts]),
+      toggleJoin: (id) =>
+        setTrips((ts) =>
+          ts.map((t) => {
+            if (t.id !== id) return t;
+            if (t.joined) return { ...t, joined: false, seatsTaken: t.seatsTaken - 1 };
+            return t.seatsTaken < t.seatsTotal ? { ...t, joined: true, seatsTaken: t.seatsTaken + 1 } : t;
+          }),
+        ),
+      events,
+      posts,
+      addPost: (p) => setPosts((ps) => [{ ...p, id: `p${Date.now()}`, postedAt: Date.now(), offers: [] }, ...ps]),
+      updatePost: (id, patch) => setPosts((ps) => ps.map((p) => (p.id === id ? { ...p, ...patch } : p))),
       online,
     }),
-    [base, offsetMin, reminders, dismissed, trips, online],
+    [base, offsetMin, reminders, dismissed, trips, events, posts, online],
   );
   return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>;
 }

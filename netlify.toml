@@ -1,0 +1,9 @@
+# Netlify build for the TanStack Start app. The Lovable Vite config defaults to a Cloudflare target,
+# so NITRO_PRESET switches the server build to Netlify Functions.
+[build]
+  command = "npm install --no-audit --no-fund && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NITRO_PRESET = "netlify"
+  NODE_VERSION = "22"

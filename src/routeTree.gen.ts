@@ -10,8 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AskRouteImport } from './routes/ask'
 import { Route as BusRouteImport } from './routes/bus'
+import { Route as CommunityRouteImport } from './routes/community'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as SosRouteImport } from './routes/sos'
 import { Route as TripsRouteImport } from './routes/trips'
@@ -19,6 +21,11 @@ import { Route as TripsRouteImport } from './routes/trips'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AskRoute = AskRouteImport.update({
@@ -29,6 +36,11 @@ const AskRoute = AskRouteImport.update({
 const BusRoute = BusRouteImport.update({
   id: '/bus',
   path: '/bus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -49,16 +61,20 @@ const TripsRoute = TripsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ask': typeof AskRoute
   '/bus': typeof BusRoute
+  '/community': typeof CommunityRoute
   '/help': typeof HelpRoute
   '/sos': typeof SosRoute
   '/trips': typeof TripsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ask': typeof AskRoute
   '/bus': typeof BusRoute
+  '/community': typeof CommunityRoute
   '/help': typeof HelpRoute
   '/sos': typeof SosRoute
   '/trips': typeof TripsRoute
@@ -66,24 +82,53 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ask': typeof AskRoute
   '/bus': typeof BusRoute
+  '/community': typeof CommunityRoute
   '/help': typeof HelpRoute
   '/sos': typeof SosRoute
   '/trips': typeof TripsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ask' | '/bus' | '/help' | '/sos' | '/trips'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/ask'
+    | '/bus'
+    | '/community'
+    | '/help'
+    | '/sos'
+    | '/trips'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ask' | '/bus' | '/help' | '/sos' | '/trips'
-  id: '__root__' | '/' | '/ask' | '/bus' | '/help' | '/sos' | '/trips'
+  to:
+    | '/'
+    | '/about'
+    | '/ask'
+    | '/bus'
+    | '/community'
+    | '/help'
+    | '/sos'
+    | '/trips'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/ask'
+    | '/bus'
+    | '/community'
+    | '/help'
+    | '/sos'
+    | '/trips'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AskRoute: typeof AskRoute
   BusRoute: typeof BusRoute
+  CommunityRoute: typeof CommunityRoute
   HelpRoute: typeof HelpRoute
   SosRoute: typeof SosRoute
   TripsRoute: typeof TripsRoute
@@ -98,6 +143,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ask': {
       id: '/ask'
       path: '/ask'
@@ -110,6 +162,13 @@ declare module '@tanstack/react-router' {
       path: '/bus'
       fullPath: '/bus'
       preLoaderRoute: typeof BusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -138,8 +197,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AskRoute: AskRoute,
   BusRoute: BusRoute,
+  CommunityRoute: CommunityRoute,
   HelpRoute: HelpRoute,
   SosRoute: SosRoute,
   TripsRoute: TripsRoute,
