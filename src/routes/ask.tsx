@@ -85,7 +85,7 @@ function AskPage() {
 
   function decide(i: number, ok: boolean) {
     const m = msgs[i];
-    if (m.role !== "assistant" || !m.action) return;
+    if (!m || m.role !== "assistant" || !m.action) return;
     if (ok && m.action.type === "reminder") {
       const a = m.action;
       const dep = departures(now).find((d) => fmtTime(d.at) === a.departure);
