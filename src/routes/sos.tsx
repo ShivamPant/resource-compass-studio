@@ -11,7 +11,7 @@ export const Route = createFileRoute("/sos")({
     ],
   }),
   component: () => (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-xl space-y-4">
       <h1 className="text-2xl font-bold">Emergency</h1>
       <SosCard />
       <p className="text-xs text-muted-foreground">

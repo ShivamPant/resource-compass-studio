@@ -95,7 +95,7 @@ function AskPage() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-11rem)] flex-col">
+    <div className="mx-auto flex min-h-[calc(100vh-14rem)] max-w-3xl flex-col">
       <div className="mb-4">
         <h1 className="text-2xl font-bold">Ask</h1>
         <p className="text-sm text-muted-foreground">Claude drafts. Nothing happens until you confirm.</p>
@@ -148,7 +148,7 @@ function AskPage() {
           e.preventDefault();
           send(text);
         }}
-        className="sticky bottom-20 mt-4 flex items-end gap-2 rounded-2xl bg-card p-2 shadow-sm ring-1 ring-border"
+        className="sticky bottom-4 mt-4 flex items-end gap-2 rounded-2xl bg-card p-2 shadow-sm ring-1 ring-border"
       >
         <textarea
           ref={inputRef}
