@@ -25,7 +25,7 @@ function BusPage() {
   const reminderFor = (at: number) => reminders.find((r) => r.departureAt === at);
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+    <div className="grid items-start gap-8 lg:grid-cols-2">
       <section className="lg:row-span-2">
         <p className="text-sm font-medium text-muted-foreground">{ROUTE.name}</p>
         <p className="text-sm text-muted-foreground">
