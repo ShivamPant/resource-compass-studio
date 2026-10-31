@@ -23,7 +23,7 @@ export function departures(now: number, count = 6): Departure[] {
         id: String(t.getTime()),
         at: t.getTime(),
         stop: ROUTE.from,
-        seatsNote: NOTES[out.length % NOTES.length],
+        seatsNote: NOTES[out.length % NOTES.length] ?? "",
       });
     }
     t.setMinutes(t.getMinutes() + 20);
