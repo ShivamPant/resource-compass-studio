@@ -21,7 +21,7 @@ const LEAD = 10;
 function BusPage() {
   const { now, reminders, addReminder, removeReminder, fastForward, resetClock, offsetMin } = useStore();
   const deps = departures(now);
-  const next = deps[0];
+  const next = deps[0]!;
   const reminderFor = (at: number) => reminders.find((r) => r.departureAt === at);
 
   return (
