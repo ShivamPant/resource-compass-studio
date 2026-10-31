@@ -6,7 +6,7 @@ import { fmtTime, minsUntil, ROUTE } from "@/lib/schedule";
 import logo from "@/assets/dride-logo.png.asset.json";
 
 const TABS = [
-  { to: "/", label: "Bus", icon: Bus },
+  { to: "/bus", label: "Bus", icon: Bus },
   { to: "/ask", label: "Ask", icon: MessageCircle },
   { to: "/trips", label: "Trips", icon: Map },
   { to: "/help", label: "Help", icon: Users },
@@ -26,7 +26,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <nav>
             <ul className="flex items-center gap-1">
               {TABS.map(({ to, label, icon: Icon }) => {
-                const active = to === "/" ? path === "/" : path.startsWith(to);
+                const active = path.startsWith(to);
                 const sos = to === "/sos";
                 return (
                   <li key={to}>
@@ -78,7 +78,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         ))}
       </div>
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-6 pb-16 pt-8">{children}</main>
+      {path === "/" ? <main className="flex-1">{children}</main> : <main className="mx-auto w-full max-w-6xl flex-1 px-6 pb-16 pt-8">{children}</main>}
 
       <footer className="border-t">
         <div className="mx-auto max-w-6xl px-6 py-6 text-xs text-muted-foreground">
@@ -107,4 +107,29 @@ export function HumanZone({ label = "Human zone: no AI here" }: { label?: string
 
 export function DemoNote({ children }: { children: ReactNode }) {
   return <p className="text-[11px] text-muted-foreground">{children}</p>;
+}
+
+const TAG_TONES = {
+  green: "bg-secondary text-secondary-foreground",
+  gold: "bg-gold text-gold-foreground",
+  maple: "bg-maple/15 text-maple",
+  sky: "bg-sky text-ai-foreground",
+} as const;
+
+export function Tag({ children, tone = "green" }: { children: ReactNode; tone?: keyof typeof TAG_TONES }) {
+  return (
+    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide ${TAG_TONES[tone]}`}>
+      {children}
+    </span>
+  );
+}
+
+export function PageTitle({ kicker, title, sub }: { kicker: string; title: string; sub?: string }) {
+  return (
+    <div className="mb-8 animate-rise">
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-maple">{kicker}</p>
+      <h1 className="mt-1 font-display text-4xl font-bold text-pine sm:text-5xl">{title}</h1>
+      {sub && <p className="mt-2 max-w-xl text-muted-foreground">{sub}</p>}
+    </div>
+  );
 }

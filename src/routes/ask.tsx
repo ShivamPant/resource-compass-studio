@@ -6,7 +6,7 @@ import { askAssistant, type Action } from "@/lib/assistant.functions";
 import { isSafetyConcern } from "@/lib/safety";
 import { useStore } from "@/lib/store";
 import { departures, fmtTime } from "@/lib/schedule";
-import { AiChip } from "@/components/AppShell";
+import { AiChip, PageTitle } from "@/components/AppShell";
 import { SosCard } from "@/components/SosCard";
 
 export const Route = createFileRoute("/ask")({
@@ -96,17 +96,14 @@ function AskPage() {
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-14rem)] max-w-3xl flex-col">
-      <div className="mb-4">
-        <h1 className="text-2xl font-bold">Ask</h1>
-        <p className="text-sm text-muted-foreground">Claude drafts. Nothing happens until you confirm.</p>
-      </div>
+      <PageTitle kicker="Powered by Claude" title="Ask D Ride" sub="Claude drafts. Nothing happens until you confirm." />
 
       <div className="flex-1 space-y-4">
         {msgs.length === 0 && (
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Try asking</p>
             {SUGGESTIONS.map((s) => (
-              <button key={s} onClick={() => send(s)} className="block w-full rounded-xl bg-card px-4 py-3 text-left text-sm ring-1 ring-border">
+              <button key={s} onClick={() => send(s)} className="block w-full rounded-2xl bg-card px-5 py-4 text-left font-semibold text-pine ring-1 ring-border lift">
                 {s}
               </button>
             ))}
@@ -200,7 +197,7 @@ function ConfirmCard({ action, status, onDecide }: { action: NonNullable<Action>
         <p className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-primary">
           <Check className="size-4" />
           {isReminder ? (
-            <>Confirmed. <Link to="/" className="underline">See it on Bus</Link></>
+            <>Confirmed. <Link to="/bus" className="underline">See it on Bus</Link></>
           ) : (
             <>Posted. You choose who to ride with in <Link to="/help" className="underline">Help</Link>.</>
           )}

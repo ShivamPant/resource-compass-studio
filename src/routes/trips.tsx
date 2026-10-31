@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { CalendarDays, MapPin, Users } from "lucide-react";
 import { draftTrip, type TripDraft } from "@/lib/assistant.functions";
 import { useStore } from "@/lib/store";
-import { AiChip } from "@/components/AppShell";
+import { AiChip, PageTitle, Tag } from "@/components/AppShell";
 
 export const Route = createFileRoute("/trips")({
   head: () => ({
@@ -61,7 +61,7 @@ function TripsPage() {
 
   return (
     <div className="grid gap-8 lg:grid-cols-2">
-      <h1 className="text-3xl font-bold lg:col-span-2">Trips</h1>
+      <div className="lg:col-span-2"><PageTitle kicker="Weekends & errands" title="Trips" sub="Group outings, drafted from emails and reviewed by organizers." /></div>
       <div className="space-y-6">
 
       <section className="rounded-2xl bg-card p-4 ring-1 ring-border">
@@ -149,8 +149,12 @@ function TripsPage() {
         ) : (
           <ul className="space-y-3">
             {trips.map((t) => (
-              <li key={t.id} className="rounded-2xl bg-card p-4 ring-1 ring-border">
-                <p className="font-bold">{t.title}</p>
+              <li key={t.id} className="rounded-3xl bg-card p-5 ring-1 ring-border lift">
+                <div className="mb-2 flex flex-wrap gap-2">
+                  <Tag tone={/hike|mount|trail/i.test(t.title + t.destination) ? "gold" : "sky"}>{/hike|mount|trail/i.test(t.title + t.destination) ? "Outdoors" : "Errands"}</Tag>
+                  <Tag tone={t.cost === "Free" ? "green" : "maple"}>{t.cost}</Tag>
+                </div>
+                <p className="font-display text-xl font-bold text-pine">{t.title}</p>
                 <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground tnum">
                   <CalendarDays className="size-4" /> {t.date} · {t.departTime}
                 </p>

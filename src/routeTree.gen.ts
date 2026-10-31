@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AskRouteImport } from './routes/ask'
+import { Route as BusRouteImport } from './routes/bus'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as SosRouteImport } from './routes/sos'
 import { Route as TripsRouteImport } from './routes/trips'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const AskRoute = AskRouteImport.update({
   id: '/ask',
   path: '/ask',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusRoute = BusRouteImport.update({
+  id: '/bus',
+  path: '/bus',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -44,6 +50,7 @@ const TripsRoute = TripsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ask': typeof AskRoute
+  '/bus': typeof BusRoute
   '/help': typeof HelpRoute
   '/sos': typeof SosRoute
   '/trips': typeof TripsRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ask': typeof AskRoute
+  '/bus': typeof BusRoute
   '/help': typeof HelpRoute
   '/sos': typeof SosRoute
   '/trips': typeof TripsRoute
@@ -59,21 +67,23 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ask': typeof AskRoute
+  '/bus': typeof BusRoute
   '/help': typeof HelpRoute
   '/sos': typeof SosRoute
   '/trips': typeof TripsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ask' | '/help' | '/sos' | '/trips'
+  fullPaths: '/' | '/ask' | '/bus' | '/help' | '/sos' | '/trips'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ask' | '/help' | '/sos' | '/trips'
-  id: '__root__' | '/' | '/ask' | '/help' | '/sos' | '/trips'
+  to: '/' | '/ask' | '/bus' | '/help' | '/sos' | '/trips'
+  id: '__root__' | '/' | '/ask' | '/bus' | '/help' | '/sos' | '/trips'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AskRoute: typeof AskRoute
+  BusRoute: typeof BusRoute
   HelpRoute: typeof HelpRoute
   SosRoute: typeof SosRoute
   TripsRoute: typeof TripsRoute
@@ -93,6 +103,13 @@ declare module '@tanstack/react-router' {
       path: '/ask'
       fullPath: '/ask'
       preLoaderRoute: typeof AskRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bus': {
+      id: '/bus'
+      path: '/bus'
+      fullPath: '/bus'
+      preLoaderRoute: typeof BusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -122,6 +139,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AskRoute: AskRoute,
+  BusRoute: BusRoute,
   HelpRoute: HelpRoute,
   SosRoute: SosRoute,
   TripsRoute: TripsRoute,
