@@ -111,7 +111,7 @@ export function DemoNote({ children }: { children: ReactNode }) {
 
 const TAG_TONES = {
   green: "bg-secondary text-secondary-foreground",
-  gold: "bg-gold/30 text-gold-foreground",
+  gold: "bg-gold text-gold-foreground",
   maple: "bg-maple/15 text-maple",
   sky: "bg-sky text-ai-foreground",
 } as const;
