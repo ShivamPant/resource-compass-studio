@@ -4,7 +4,7 @@ import { useStore } from "@/lib/store";
 import { departures, fmtTime, minsUntil, ROUTE } from "@/lib/schedule";
 import { AiChip, DemoNote } from "@/components/AppShell";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/bus")({
   head: () => ({
     meta: [
       { title: "Bus · D Ride" },
