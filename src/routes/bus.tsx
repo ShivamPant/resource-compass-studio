@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Bell, BellOff, FastForward, RotateCcw } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { departures, fmtTime, minsUntil, ROUTE } from "@/lib/schedule";
-import { AiChip, DemoNote } from "@/components/AppShell";
+import { AiChip, DemoNote, PageTitle, Tag } from "@/components/AppShell";
 
 export const Route = createFileRoute("/bus")({
   head: () => ({
@@ -25,15 +25,14 @@ function BusPage() {
   const reminderFor = (at: number) => reminders.find((r) => r.departureAt === at);
 
   return (
+    <>
+    <PageTitle kicker="Summit on Juniper Shuttle" title="Next departures" sub="To Dartmouth Green. Times are a demo timetable, not live tracking." />
     <div className="grid items-start gap-8 lg:grid-cols-2">
       <section className="lg:row-span-2">
-        <p className="text-sm font-medium text-muted-foreground">{ROUTE.name}</p>
-        <p className="text-sm text-muted-foreground">
-          {ROUTE.from} → {ROUTE.to}
-        </p>
-        <div className="mt-4 rounded-2xl bg-card p-5 shadow-sm ring-1 ring-border">
-          <p className="text-sm text-muted-foreground">Next bus in</p>
-          <p className="tnum text-7xl font-extrabold lg:text-8xl tracking-tight text-primary">
+        <div className="rounded-3xl bg-pine-card p-7 text-primary-foreground shadow-lift">
+          <div className="flex flex-wrap gap-2"><Tag tone="gold">Next up</Tag><Tag tone="sky">{ROUTE.from} → {ROUTE.to}</Tag></div>
+          <p className="mt-5 text-sm opacity-80">Next bus in</p>
+          <p className="tnum text-7xl font-extrabold lg:text-8xl tracking-tight">
             {minsUntil(next.at, now)}
             <span className="ml-1 text-2xl font-semibold">min</span>
           </p>
@@ -54,16 +53,17 @@ function BusPage() {
 
       <section>
         <h2 className="mb-2 text-sm font-semibold">Later departures</h2>
-        <ul className="divide-y rounded-2xl bg-card ring-1 ring-border">
+        <ul className="divide-y rounded-3xl bg-card ring-1 ring-border">
           {deps.slice(1).map((d) => {
             const r = reminderFor(d.at);
             return (
               <li key={d.id} className="flex items-center justify-between px-4 py-3">
                 <div>
                   <p className="tnum text-lg font-bold">{fmtTime(d.at)}</p>
-                  <p className="text-xs text-muted-foreground">
-                    in {minsUntil(d.at, now)} min · {d.seatsNote}
-                  </p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <span className="tnum text-xs text-muted-foreground">in {minsUntil(d.at, now)} min</span>
+                    <Tag tone={d.seatsNote.includes("quiet") ? "green" : "maple"}>{d.seatsNote.includes("quiet") ? "Quiet" : "Busy"}</Tag>
+                  </div>
                   {r?.source === "ai" && <div className="mt-1"><AiChip>Set from Ask, confirmed by you</AiChip></div>}
                 </div>
                 <ReminderButton
@@ -100,6 +100,7 @@ function BusPage() {
         </div>
       </section>
     </div>
+    </>
   );
 }
 
@@ -109,7 +110,7 @@ function ReminderButton({ on, onToggle, primary }: { on: boolean; onToggle: () =
       <button
         onClick={onToggle}
         className={`mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-base font-semibold ${
-          on ? "bg-secondary text-secondary-foreground" : "bg-primary text-primary-foreground"
+          on ? "bg-pine-foreground/15 text-primary-foreground ring-1 ring-pine-foreground/40" : "bg-gold text-gold-foreground"
         }`}
       >
         {on ? <BellOff className="size-5" /> : <Bell className="size-5" />}

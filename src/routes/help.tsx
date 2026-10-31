@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Flag } from "lucide-react";
-import { HumanZone, DemoNote } from "@/components/AppShell";
+import { HumanZone, DemoNote, PageTitle, Tag } from "@/components/AppShell";
 
 export const Route = createFileRoute("/help")({
   head: () => ({
@@ -30,10 +30,7 @@ function HelpPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Ask the community</h1>
-        <p className="text-sm text-muted-foreground">Replaces scattered Slack ride threads.</p>
-      </div>
+      <PageTitle kicker="Community" title="Find a seat" sub="One board instead of scattered Slack ride threads." />
 
       <form
         onSubmit={(e) => {
@@ -59,7 +56,8 @@ function HelpPage() {
 
       <ul className="space-y-3">
         {posts.map((p) => (
-          <li key={p.id} className="rounded-2xl bg-card p-4 ring-1 ring-border">
+          <li key={p.id} className="rounded-3xl bg-card p-5 ring-1 ring-border lift">
+            <div className="mb-2 flex gap-2"><Tag tone={p.offers.length ? "green" : "maple"}>{p.offers.length ? `${p.offers.length} offers` : "Needs a driver"}</Tag><Tag tone="sky">{/boston|logan/i.test(p.text) ? "Long trip" : "Local"}</Tag></div>
             <div className="flex items-baseline justify-between">
               <p className="font-semibold">{p.name}</p>
               <p className="text-xs text-muted-foreground">{p.when}</p>

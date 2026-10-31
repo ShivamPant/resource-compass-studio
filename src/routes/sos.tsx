@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SosCard } from "@/components/SosCard";
+import { PageTitle } from "@/components/AppShell";
 
 export const Route = createFileRoute("/sos")({
   head: () => ({
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/sos")({
   }),
   component: () => (
     <div className="mx-auto max-w-xl space-y-4">
-      <h1 className="text-2xl font-bold">Emergency</h1>
+      <PageTitle kicker="Human zone" title="Emergency" sub="Direct lines to people. No AI on this page." />
       <SosCard />
       <p className="text-xs text-muted-foreground">
         This screen never uses AI. Nothing here is sent anywhere until you place the call yourself.
